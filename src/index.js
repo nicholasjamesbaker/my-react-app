@@ -3,13 +3,10 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 
-function AppTwo(){
-  return <h1>This is the Second App</h1>;
-}
-
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-  <App />,
+  <App login={"nicholasjamesbaker"}/>,
+  // <App secret={true}/>,
   // React.createElement("h1", null, "Hello, World!"),
 );
 
