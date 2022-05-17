@@ -7,8 +7,9 @@ import {BrowserRouter as Router} from "react-router-dom";
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <Router>
-    <App />
+    <App />,
   </Router>
+  
   // <App login={"nicholasjamesbaker"}/>,
   // <App secret={true}/>,
   // React.createElement("h1", null, "Hello, World!"),
