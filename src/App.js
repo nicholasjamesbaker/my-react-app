@@ -1,13 +1,16 @@
 import React, {useState, useEffect} from "react";
 import './styles.css';
-import {MoviePage, Home, AddMovie} from './pages';
+import {MoviePage, Home, MovieForm, MovieFormDisplay} from './pages';
 import NavBar from "./NavBar";
-import {Router, Route, Routes} from "react-router-dom";
-// import 'bootstrap/dist/css/bootstrap.min.css';
-
-// https://api.github.com/users/nicholasjamesbaker
+import {Route, Routes} from "react-router-dom";
 
 function App(){
+
+  const [movieForm, updateMovieForm] = useState([]);
+
+  const addMovie = (movie) => {
+    updateMovieForm([...movieForm, movie]);
+  };
   
   const [movies, setMovies] = useState(null);
 
@@ -28,7 +31,13 @@ function App(){
     <Routes>
       <Route path="/" element={<Home />}/>
       <Route path="/movies" element={<MoviePage movies={movies} setMovies={setMovies}/>}/>
-      <Route path="/addmovie" element={<AddMovie/>}/>
+      <Route path="/addmovie" 
+      element={
+        <>
+      <MovieForm addMovie={addMovie}/>
+      <MovieFormDisplay movieForm={movieForm}/>
+      </>
+      }/>
     </Routes>
     </div>
     </>

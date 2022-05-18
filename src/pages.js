@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { useForm } from 'react-hook-form';
 import './styles.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
@@ -15,12 +14,12 @@ export function Home(){
 
 export function MoviePage({movies, setMovies}) {
   return (
-      <>
+      <div id="reviews">
           <h1><b>Nick's Movie Reviews</b></h1>
           <MovieList movies={movies} onRemoveMovie = {
                   movieName => {const newMovies = movies.filter(movie => movie.name !== movieName);
                     setMovies(newMovies);}}/>
-      </>
+      </div>
   );
 }
 
@@ -52,90 +51,106 @@ export function Movie({name, date, actors, poster, rating, onRemove = f => f}) {
   )
 }
 
+export function MovieForm({addMovie}) {
 
+  const [movies, setMovies] = useState({
+    name: "",
+    date: "",
+    actors: "",
+    poster: "",
+    rating: ""
+  });
 
+  const handleChange = (event) => {
+    setMovies({ ...movies, [event.target.name]: event.target.value });
+  };
 
-
-
-
-
-
-
-// function handleSubmit(event) {
-//     event.preventDefault();
-  
-//     const data = new FormData(event.target);
-  
-//     const value = data.get('movie_name');
-  
-//     console.log({ value });
-// }
-
-// const form = document.querySelector('form');
-// form.addEventListener('submit', handleSubmit);
-
-export function AddMovie() {
-  let json_data = ["test"];
-  // name, date, actors, poster, rating
-  const [name, setName] = useState("");
-  const [date, setDate] = useState("");
-  const [actors, setActors] = useState("");
-  const [poster, setPoster] = useState("");
-  const [rating, setRating] = useState("");
-
-  // const [json_data, set_json] = useState("test");
-  const { register, handleSubmit, formState: { errors } } = useForm();
-  const onSubmit = data => {
-    console.log(data.name);
-    if (data.poster == "Default"){
-      data.poster = "images/poster-placeholder.png";
-    }
-    else if (data.poster == "Up"){
-      data.poster = "images/thumbs_up.png"
-    }
-    else{
-      data.poster = "images/thumbs_down.png"
-    }
-
-    
-    console.log(data.poster);
-    json_data = JSON.stringify(data);
-    console.log("Json Data");
-    console.log(json_data);
-  }
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    addMovie(movies);
+    setMovies({ name: "", date: "", actors: "" , poster: "", rating: ""});
+  };
 
   return (
-      <>
-      <container id="addmovie">
-      <h1><b>Add a Movie Review</b></h1>
-    <form name="myForm" onSubmit={handleSubmit(onSubmit)}>
-      <input type="text" 
-      id="name" 
-      onSubmit={e => setName(e.target.value)} 
-      placeholder="Movie name" {...register("name", {required: true, minLength: 1, maxLength: 80})} />
-      <br></br>
-      <input type="text" id="date" placeholder="Release date" {...register("date", {required: true, minLength: 1, maxLength: 100})} />
-      <br></br>
-      <input type="text" id="actors" placeholder="Actors" {...register("actors", {required: true, minLength: 1, maxLength: 100})} />
-      <br></br>
-      <select id="poster"{...register("poster", { required: true })}>
-        <option value="Default">Placeholder Image</option>
-        <option value="Up">Thumbs Up</option>
-        <option value="Down">Thumbs Down</option>
-      </select>
-      <br></br>
-      <input type="text" id="rating" placeholder="Rating" {...register("rating", {required: true, minLength: 1, maxLength: 1, })} />
-      <br></br>
-      <input type="submit" />
-    </form>
-    <br></br>
-    <div>
-      <h1><b>Added Movies</b></h1>
-      <h2>Movie name: {name}</h2>
+    <div id="addmovie">
+    <div className="myForm">
+      <form onSubmit={handleSubmit}>
+        <div>
+          <h1><b>Add a Movie Review</b></h1>
+        </div>
+        <div>
+          <input
+            type="text"
+            name="name"
+            placeholder="Movie name"
+            value={movies.name}
+            onChange={handleChange}
+            required
+          />
+        </div>
+        <div>
+          <input
+            type="text"
+            name="date"
+            placeholder="Release date"
+            value={movies.date}
+            onChange={handleChange}
+            required
+          />
+        </div>
+        <div>
+          <input
+            type="text"
+            name="actors"
+            placeholder="Actors"
+            value={movies.actors}
+            onChange={handleChange}
+            required
+          />
+        </div>
+          <select 
+          name="poster"
+          value={movies.poster}
+          onChange={handleChange}>
+            <option value="images/poster_placeholder.png">Placeholder Image</option>
+            <option value="images/thumbs_up.png">Thumbs Up</option>
+            <option value="images/thumbs_down.png">Thumbs Down</option>
+          </select>
+          <div>
+          <input
+            type="text"
+            name="rating"
+            placeholder="Rating (_ out of 5)"
+            value={movies.rating}
+            onChange={handleChange}
+            required
+          />
+        </div>
+        <div>
+          <button>Add Movie</button>
+        </div>
+      </form>
     </div>
-    </container>
-    
-    </>
+    </div>
   );
 }
 
+export function MovieFormDisplay({movieForm}) {
+  return (
+
+    <div id="addmovie">
+      <br></br>
+      {movieForm.map((movie) => (
+        <>
+        {console.log("test")}
+        <img src={movie.poster} width="276" height="500"></img>
+        <h2><b>{movie.name}</b></h2> 
+        <h3>Release Date: {movie.date}</h3>
+        <h3>Starring: {movie.actors} </h3>
+        <h3>Rating: {movie.rating} out of 5</h3>
+        </>
+      ))}
+    
+    </div>
+  );
+}
