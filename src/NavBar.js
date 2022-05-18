@@ -11,7 +11,7 @@ export default function NavBar(){
              <ul className="nav-links">
                 <Link to="/">Home</Link>
                 <Link to="/movies">Movies</Link>
-                <Link to="/shop">Add Movie</Link>
+                <Link to="/addmovie">Add Movie</Link>
              </ul>
           </div>
     );

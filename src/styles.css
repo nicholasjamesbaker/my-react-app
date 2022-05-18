@@ -31,3 +31,14 @@
     text-decoration: none;
   }
   
+  #addmovie {
+    display: flexbox;
+    text-align: center;
+    align-items: center;
+    /* justify-content: center; */
+  }
+
+  #welcome {
+   text-align: center;
+   font-size: 15px;
+  }
