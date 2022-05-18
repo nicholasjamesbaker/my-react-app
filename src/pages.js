@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import './styles.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -13,31 +13,53 @@ export function Home(){
     );
 }
 
-export function MovieList( {movies = [], onChangeMovies = f => f} ){
-    //loop through and output all movies display
+export function MoviePage({movies, setMovies}) {
+  return (
+      <>
+          <h1><b>Nick's Movie Reviews</b></h1>
+          <MovieList movies={movies} onRemoveMovie = {
+                  movieName => {const newMovies = movies.filter(movie => movie.name !== movieName);
+                    setMovies(newMovies);}}/>
+      </>
+  );
+}
 
-    if  ( movies == null || movies == undefined) 
+export function MovieList( { movies = [], onRemoveMovie = f => f}) {
+  if  ( movies == null || movies == undefined) 
         return <h2>No movies available</h2>;
 
-    return (
-        <>
-        {   //jsx
-            movies.map((movie, i) => {
-                return (
-                <>
-                <img src={movie.poster} width="276" height="500"></img>
-                <h2><b>{movie.name}</b></h2> 
-                <h3>Release Date: {movie.date}</h3>
-                <h3>Starring: {movie.actors.join(', ')} </h3>
-                <h3>Rating: {movie.rating} out of 5</h3>
-                </>
-                )
-            })
-        }
-        </>
-    
-    );
+  return (
+      <div>
+          {movies.map( movie => {
+              return <Movie key={movie.name} {...movie} onRemove={onRemoveMovie} />
+      })}
+      </div>
+  );
 }
+
+export function Movie({name, date, actors, poster, rating, onRemove = f => f}) {
+  return (
+    <>
+    <br></br>
+    <img src={poster} width="276" height="500"></img>
+    <h2><b>{name}</b></h2> 
+    <h3>Release Date: {date}</h3>
+    <h3>Starring: {actors.join(', ')} </h3>
+    <h3>Rating: {rating} out of 5</h3>
+    <button onClick={() => onRemove(name)}>Remove movie</button>
+    <br></br>
+    </>
+  )
+}
+
+
+
+
+
+
+
+
+
 
 // function handleSubmit(event) {
 //     event.preventDefault();
@@ -53,17 +75,44 @@ export function MovieList( {movies = [], onChangeMovies = f => f} ){
 // form.addEventListener('submit', handleSubmit);
 
 export function AddMovie() {
-  const { register, handleSubmit, formState: { errors } } = useForm();
-  const onSubmit = data => console.log(data);
+  let json_data = ["test"];
+  // name, date, actors, poster, rating
+  const [name, setName] = useState("");
+  const [date, setDate] = useState("");
+  const [actors, setActors] = useState("");
+  const [poster, setPoster] = useState("");
+  const [rating, setRating] = useState("");
 
-  
-  
+  // const [json_data, set_json] = useState("test");
+  const { register, handleSubmit, formState: { errors } } = useForm();
+  const onSubmit = data => {
+    console.log(data.name);
+    if (data.poster == "Default"){
+      data.poster = "images/poster-placeholder.png";
+    }
+    else if (data.poster == "Up"){
+      data.poster = "images/thumbs_up.png"
+    }
+    else{
+      data.poster = "images/thumbs_down.png"
+    }
+
+    
+    console.log(data.poster);
+    json_data = JSON.stringify(data);
+    console.log("Json Data");
+    console.log(json_data);
+  }
+
   return (
       <>
       <container id="addmovie">
       <h1><b>Add a Movie Review</b></h1>
     <form name="myForm" onSubmit={handleSubmit(onSubmit)}>
-      <input type="text" id="name" placeholder="Movie name" {...register("name", {required: true, minLength: 1, maxLength: 80})} />
+      <input type="text" 
+      id="name" 
+      onSubmit={e => setName(e.target.value)} 
+      placeholder="Movie name" {...register("name", {required: true, minLength: 1, maxLength: 80})} />
       <br></br>
       <input type="text" id="date" placeholder="Release date" {...register("date", {required: true, minLength: 1, maxLength: 100})} />
       <br></br>
@@ -79,7 +128,13 @@ export function AddMovie() {
       <br></br>
       <input type="submit" />
     </form>
+    <br></br>
+    <div>
+      <h1><b>Added Movies</b></h1>
+      <h2>Movie name: {name}</h2>
+    </div>
     </container>
+    
     </>
   );
 }

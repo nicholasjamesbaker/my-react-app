@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from "react";
 import './styles.css';
-import {MovieList, Home, AddMovie} from './pages';
+import {MoviePage, Home, AddMovie} from './pages';
 import NavBar from "./NavBar";
 import {Router, Route, Routes} from "react-router-dom";
 // import 'bootstrap/dist/css/bootstrap.min.css';
@@ -27,7 +27,7 @@ function App(){
     <NavBar/>
     <Routes>
       <Route path="/" element={<Home />}/>
-      <Route path="/movies" element={<MovieList movies={movies} setMovies={setMovies}/>}/>
+      <Route path="/movies" element={<MoviePage movies={movies} setMovies={setMovies}/>}/>
       <Route path="/addmovie" element={<AddMovie/>}/>
     </Routes>
     </div>
