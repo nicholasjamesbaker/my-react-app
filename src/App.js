@@ -3,6 +3,7 @@ import './styles.css';
 import {MoviePage, Home, MovieForm, MovieFormDisplay} from './pages';
 import NavBar from "./NavBar";
 import {Route, Routes} from "react-router-dom";
+//test
 
 function App(){
 
